@@ -11,4 +11,6 @@ public interface ArticleService {
 
 	int updateStatus(String status, String id);
 
+	void add(Article article);
+
 }

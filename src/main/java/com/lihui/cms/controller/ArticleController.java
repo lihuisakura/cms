@@ -1,15 +1,28 @@
 package com.lihui.cms.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.lihui.cms.domain.Article;
+import com.lihui.cms.domain.Category;
+import com.lihui.cms.domain.Channel;
+import com.lihui.cms.domain.User;
 import com.lihui.cms.service.ArticleService;
+import com.lihui.cms.service.ChannelService;
 
 
 @Controller
@@ -18,6 +31,8 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private ChannelService channelService;
 
 	/**
 	 * 
@@ -111,6 +126,76 @@ public class ArticleController {
 	@RequestMapping("toAdd")
 	public Object toAdd() {
 		return "my/release";
+	}
+	/**
+	 * 
+	 * @Title: channelList 
+	 * @Description: 栏目列表
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("channelList")
+	public Object channelList() {
+		List<Channel> list=channelService.channelList();
+		return list;
+	}
+	/**
+	 * 
+	 * @Title: categoryList 
+	 * @Description: 分类列表
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("categoryList")
+	public Object categoryList(String id) {
+		List<Category> list=channelService.categoryList(id);
+		return list;
+	}
+	/**
+	 * 
+	 * @Title: add 
+	 * @Description: 文章发布
+	 * @param article
+	 * @param file
+	 * @param session
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("add")
+	public Object add(Article article,String content,@RequestParam("file")MultipartFile file,HttpSession session) {
+		User user = (User)(session.getAttribute("user"));
+		if(null!=user) {
+			article.setUser_id(user.getId());
+		}
+		article.setContext(content);
+		try {
+			if(file.getSize()>0) {
+				//上传图片的路劲
+				String path="e:/pic/";
+				//获得上传图片的名称
+				String originalFilename = file.getOriginalFilename();
+				//获得后缀
+				String endName = originalFilename.substring(originalFilename.lastIndexOf("."));
+				//获得新的文件名称
+				String fileName = UUID.randomUUID().toString()+endName;
+				//创建上传的文件
+				File file2 = new File(path+fileName);
+				
+				file.transferTo(file2);
+				article.setPicture(fileName);
+				
+			}
+			articleService.add(article);
+			return true;
+		} catch (IllegalStateException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

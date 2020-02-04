@@ -11,4 +11,12 @@ public interface UserService {
 
 	int updateLocated(String id, String locted);
 
+	User loginUser(String username,String password);
+
+	Boolean registerUser(String username, String password);
+
+	Boolean loginAdmin(String username, String password);
+
+	Boolean registerAdmin(String username, String password);
+
 }

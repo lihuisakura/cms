@@ -14,8 +14,6 @@
 <script type="text/javascript">
 //给左侧(left.jsp)中的所有的连接绑定点击事件
 $(function(){
-	
-	
 	$("[style='text-decoration:none;']").click(function(){
 		$("[style='text-decoration:none;']").attr("class","my-btn btn-outline-danger");
 		$(this).attr("class","my-btn btn-outline-danger active");
@@ -25,6 +23,8 @@ $(function(){
 		$("#content-wrapper").load(url);
 		
 	})
+	
+	
 })
 
 </script>

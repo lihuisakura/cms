@@ -27,10 +27,12 @@ function look(id){
 		<ul class="list-unstyled">
 			<c:forEach items="${list}" var="a">
 			<li class="media">
-				<img style="margin-left: 200px" src="/resource/image/${a.picture}" class="mr-3" alt="..." width="190px" height="130px">
-				<div  class="media-body text-center">
-					<h5 class="mt-0 mb-1 "><a href="javascript:void(0)" onclick="look(${a.id})" style="font-size: 15px;" data-toggle="modal" data-target="#exampleModal">${a.title }</a></h5><br>
-					${a.user.username }&nbsp;&nbsp;&nbsp;<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd"/>
+				<img style="margin-left: 100px" src="/pic/${a.picture}" class="mr-3" alt="..." width="120px" height="100px">
+				<div style="margin-left: 100px">
+					<h5 class="mt-0 mb-1 "><a  href="javascript:void(0)" onclick="look(${a.id})" style="font-size: 25px;color: black;font-weight: bold;" data-toggle="modal" data-target="#exampleModal">${a.title }</a></h5><br>
+					${a.user.username }&nbsp;&nbsp;·&nbsp;&nbsp;
+					<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd"/>
+					
 				</div></li>
 				<hr>
 				</c:forEach>

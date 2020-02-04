@@ -97,7 +97,7 @@ function changeStatus(status,obj){
 						</td>
 						<td>${a.user.username}</td>
 						<td>${a.hits}</td>
-						<td>${a.hot}</td>
+						<td>${a.hot>=10?'是':'否'}</td>
 						<td>${a.status==0?'待审':a.status==1?'审核通过':'审核未通过'}</td>
 						<td><fmt:formatDate value="${a.created}" /></td>
 						<td>

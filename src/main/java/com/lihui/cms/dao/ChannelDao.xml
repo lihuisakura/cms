@@ -24,4 +24,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectCategory" resultType="Category">
 		select * from cms_category where channel_id=#{id}
 	</select>
+	
 </mapper>

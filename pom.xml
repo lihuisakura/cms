@@ -257,7 +257,12 @@
 					<path>/</path>
 					<!-- get请求中文乱码 -->
 					<uriEncoding>utf-8</uriEncoding>
-
+					 <!-- tomcat虚拟映射路径 -->
+            	<staticContextPath>/pic</staticContextPath>
+           	 	<staticContextDocbase>e:/pic/</staticContextDocbase>
+            	<contextReloadable>false</contextReloadable>
+            	<useTestClasspath>true</useTestClasspath>
+				
 				</configuration>
 			</plugin>
 			<plugin>

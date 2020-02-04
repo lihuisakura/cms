@@ -18,49 +18,53 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 		src="/resource/js/jquery-3.2.1.js"></script>
 
 	<script>
-		KindEditor.ready(function(K) {
-			window.editor1 = K.create('textarea[name="content1"]', {
-				cssPath : '/resource/kindeditor/plugins/code/prettify.css',
-				uploadJson : '/resource/kindeditor/jsp/upload_json.jsp',
-				fileManagerJson : '/resource/kindeditor/jsp/file_manager_json.jsp',
-				allowFileManager : true,
-				afterCreate : function() {
-					var self = this;
-					K.ctrl(document, 13, function() {
-						self.sync();
-						document.forms['example'].submit();
-					});
-					K.ctrl(self.edit.doc, 13, function() {
-						self.sync();
-						document.forms['example'].submit();
-					});
-				}
-			});
-			prettyPrint();
-		});
-		function query(){
-		
-			//alert( $("[name='content1']").attr("src"))
-		} 
-		
-		$(function(){
-			//加载所有的栏目追加到下拉框
-			$.post("/channel/channelList",{},function(json){
-				for(var i in json){
-					$("[name='channel_id']").append("<option value='"+json[i].id+"'>"+json[i].name+"</option>");
-				}
-			});
-			
-			//只要选中一个栏目自动触发加载此栏目下的所有的分类
-			$("[name='channel_id']").change(function(){
-				$.post("/article/selectsCategory",{id:$(this).val()},function(json){
-					//追加之前情清空
-					$("[name='category_id'] option:gt(0)").remove();
-					for(var i in json){
-						$("[name='category_id']").append("<option value='"+json[i].id+"'>"+json[i].name+"</option>");
-					}
+	KindEditor.ready(function(K) {
+		window.editor1 = K.create('textarea[name="content1"]', {
+			cssPath : '/resource/kindeditor/plugins/code/prettify.css',
+			uploadJson : '/resource/kindeditor/jsp/upload_json.jsp',
+			fileManagerJson : '/resource/kindeditor/jsp/file_manager_json.jsp',
+			allowFileManager : true,
+			afterCreate : function() {
+				var self = this;
+				K.ctrl(document, 13, function() {
+					self.sync();
+					document.forms['example'].submit();
 				});
-			})
+				K.ctrl(self.edit.doc, 13, function() {
+					self.sync();
+					document.forms['example'].submit();
+				});
+			}
+		});
+		prettyPrint();
+	});
+	function query(){
+	
+		//alert( $("[name='content1']").attr("src"))
+	} 
+
+		$(function(){
+			$.post("/article/channelList",function(list){
+				for ( var i in list) {
+					$("[name='channel_id']").append("<option value="+list[i].id+">"+list[i].name+"</option>");
+				}
+			});
+			$("[name='channel_id']").change(function(){
+				var id=$("[name='channel_id']").val();
+				if(id==0){
+					$("[name='category_id']").empty();
+					$("[name='category_id']").append("<option value='0'>---请选择分类---</option>");
+				}else{
+					$.post("/article/categoryList",{id:id},function(list){
+						$("[name='category_id']").empty();
+						$("[name='category_id']").append("<option value='0'>---请选择分类---</option>");
+						for ( var i in list) {
+							$("[name='category_id']").append("<option value="+list[i].id+">"+list[i].name+"</option>");
+						}
+					});
+				}
+				
+			});
 			
 		})
 		
@@ -71,7 +75,6 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 			var formData=new FormData($("#f1")[0]);
 			//封装富文本中的html内容
 			formData.append("content",editor1.html());
-			
 			//ajax提交
 			$.ajax({
 				// 告诉jQuery不要去处理发送的数据
@@ -96,18 +99,19 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 </head>
 <body >
 	<%=htmlData%>
-	<form style="margin-left:150px" name="example" id="f1">
+	
+	<form style="margin-left:50px" name="example" id="f1">
 	
 		文章标题:
 		<input style="width: 920px" type="text" name="title" class="form-control"/><br>
 		<div class="form-inline">
 		栏目:<select name="channel_id" class="form-control">
-			<option>---请选择栏目---</option>
+			<option value="0">---请选择栏目---</option>
 			</select>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		分类:<select name="category_id" class="form-control">
-			<option>---请选择分类---</option>
+			<option value="0">---请选择分类---</option>
 		</select>
 		</div>
 		<br>
@@ -115,12 +119,10 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 		<input type="file" name="file"/>
 		<br>
 		<br>
-		<textarea name="content1" cols="100" rows="8" style="width:920px;height:200px;visibility:hidden;">
+		<textarea  name="content1" cols="100" rows="8" style="width:920px;height:200px;visibility:hidden;">
 		<%=htmlspecialchars(htmlData)%></textarea>
+		
 		<br />
-		
-		
-		
 		<button type="button" class="btn btn-primary" onclick="add()">发布</button>
 	</form>
 </body>

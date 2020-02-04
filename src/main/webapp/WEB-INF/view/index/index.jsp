@@ -56,27 +56,38 @@ $(function(){
 	
 	
 	<!-- 今日头条系统顶部 -->
-	<nav  style="background-color: black;height:40px;">
-		<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 1000px;"   href="my">个人中心</a>
-	</nav>
-	<div id="wrapper">
+	<nav  style="background-color: black;height:34px;">
+		<c:if test="${user==null}">
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 1100px;background-color: red;width:50px;text-align: center;"   href="user/login">登录</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="user/register">注册</a>
+		</c:if>
+		<c:if test="${user!=null}">
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:1100px;text-align: center;"   href="my">${user.nickname}</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="user/logout">注销</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="my">个人中心</a>
+		</c:if>
 		
+		<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="javascript:void(0)">侵权投诉</a>
+		<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="javascript:void(0)">头条产品</a>
+	</nav>
+	
+	<div id="wrapper">
 		<!-- 今日头条系统左部菜单 -->
 		<ul style="background-color: white;" class="sidebar navbar-nav"></ul>
 		<ul  style="text-align:center;list-style-type:none;background-color: white;" class="sidebar navbar-nav" >
-			<li style="display:inline;list-style-type:none;margin-top: 10px;margin-bottom: 10px" class="nav-item">
+			<li style="display:inline;list-style-type:none;margin-top: 20px;margin-bottom: 10px" class="nav-item">
 				<a  href="index">
 					<img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png"  alt="今日头条" style="width: 108px; height: 27px;">
 				</a>
 			</li>
-			<li>
-				<a  class="my-btn btn-outline-danger active" style="text-decoration:none;"   href="javascript:void(0)" data="">
+			<li style="margin-top: 3px">
+				<a  class=" my-btn btn-outline-danger active" style="text-decoration:none;"   href="javascript:void(0)" data="1111">
 						 热点
 				</a>
 			</li>
 			<c:forEach items="${channelList}" var="c">
-				<li>
-					<a  class="my-btn btn-outline-danger" style="text-decoration:none;"   href="javascript:void(0)" data="">
+				<li style="margin-top: 3px">
+					<a  class="my-btn btn-outline-danger" style="text-decoration:none;"   href="javascript:void(0)" data="111">
 							 ${c.name}
 					</a>
 				</li>
@@ -87,11 +98,12 @@ $(function(){
 		<!-- 中间内容显示区域 -->
 		<div id="content-wrapper">
 			
-				jjjj
+				
 			
 
 		</div>
 		<ul style="background-color: white;" class="sidebar navbar-nav"></ul>
 	</div>
+	
 </body>
 </html>

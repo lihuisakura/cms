@@ -35,4 +35,10 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		return articleDao.updateStatus(status,id);
 	}
+
+	@Override
+	public void add(Article article) {
+		// TODO Auto-generated method stub
+		articleDao.add(article);
+	}
 }

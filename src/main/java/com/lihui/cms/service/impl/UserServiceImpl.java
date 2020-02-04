@@ -29,4 +29,28 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.updateLocated(id,locted);
 	}
+
+	@Override
+	public User loginUser(String username,String password) {
+		// TODO Auto-generated method stub
+		return userDao.loginUser(username,password);
+	}
+
+	@Override
+	public Boolean registerUser(String username, String password) {
+		// TODO Auto-generated method stub
+		return userDao.registerUser(username,password)>0;
+	}
+
+	@Override
+	public Boolean loginAdmin(String username, String password) {
+		// TODO Auto-generated method stub
+		return userDao.loginAdmin(username,password)>0;
+	}
+
+	@Override
+	public Boolean registerAdmin(String username, String password) {
+		// TODO Auto-generated method stub
+		return userDao.registerAdmin(username,password)>0;
+	}
 }

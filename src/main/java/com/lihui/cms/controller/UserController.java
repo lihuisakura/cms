@@ -2,6 +2,8 @@ package com.lihui.cms.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +48,7 @@ public class UserController {
 	/**
 	 * 
 	 * @Title: updateLocated 
-	 * @Description: TODO
+	 * @Description: 修改用户状态
 	 * @param id
 	 * @param locted
 	 * @return
@@ -58,5 +60,68 @@ public class UserController {
 		int i=userService.updateLocated(id,locted);
 		return i>=1?true:false;
 	}
+	
+	/**
+	 * 
+	 * @Title: login 
+	 * @Description: 进入用户登陆界面
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("/login")
+	public Object login() {
+		return "public/login";
+	}
+	/**
+	 * 
+	 * @Title: logout
+	 * @Description: 注销
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("/logout")
+	public Object logout(HttpSession session) {
+		session.removeAttribute("user");
+		return "redirect:/index";
+	}
+	/**
+	 * 
+	 * @Title: register 
+	 * @Description: 进入用户注册界面
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("/register")
+	public Object register() {
+		return "public/register";
+	}
 
+	/**
+	 * 
+	 * @Title: loginUser 
+	 * @Description: 用户登录
+	 * @param user
+	 * @param session
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("/loginUser")
+	public Object loginUser(User user,HttpSession session) {
+		user=userService.loginUser(user.getUsername(),user.getPassword());
+		
+		if(user!=null) {
+			session.setAttribute("user", user);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/registerUser")
+	public Object registerUser(User user) {
+		Boolean flag=userService.registerUser(user.getUsername(),user.getPassword());
+		return flag;
+	}
 }
