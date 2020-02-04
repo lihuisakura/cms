@@ -49,7 +49,7 @@ public class ArticleController {
 	public Object selects(Model m, Article article, @RequestParam(defaultValue = "1") Integer pageNum,
 			@RequestParam(defaultValue = "3") Integer pageSize) {
 
-		PageInfo<Article> page = articleService.getArticleList(article.getTitle(), article.getStatus(), pageNum,
+		PageInfo<Article> page = articleService.getArticleList(article, pageNum,
 				pageSize);
 
 		m.addAttribute("page", page);
@@ -106,7 +106,7 @@ public class ArticleController {
 	public Object selectArticleList(Model m, Article article, @RequestParam(defaultValue = "1") Integer pageNum,
 			@RequestParam(defaultValue = "3") Integer pageSize) {
 
-		PageInfo<Article> page = articleService.getArticleList(article.getTitle(), article.getStatus(), pageNum,
+		PageInfo<Article> page = articleService.getArticleList(article, pageNum,
 				pageSize);
 
 		m.addAttribute("page", page);

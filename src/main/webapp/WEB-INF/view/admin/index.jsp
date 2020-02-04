@@ -40,7 +40,7 @@ $(function(){
   user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
-  padding: 0.775rem 0rem;
+  padding: 0.5rem 0rem;
   font-size: 1.25rem;
   line-height: 1.5;
   border-radius: 0.25rem;

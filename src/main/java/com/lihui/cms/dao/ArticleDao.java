@@ -10,7 +10,7 @@ import com.lihui.cms.domain.Article;
 
 public interface ArticleDao {
 
-	List<Article> getArticleList(@Param("title")String title, @Param("status")Integer status);
+	List<Article> getArticleList(Article article);
 
 	Article selectArticle(String id);
 	@Update("update cms_article set status=#{status} where id=#{id}")
@@ -18,5 +18,6 @@ public interface ArticleDao {
 
 	void add(Article article);
 
+	
 	
 }

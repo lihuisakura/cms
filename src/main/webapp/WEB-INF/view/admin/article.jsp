@@ -93,7 +93,7 @@ function changeStatus(status,obj){
 						<td>${a.id }</td>
 						<td>${a.title}</td>
 						<td>
-							<img alt="" style="width: 60px;" src="resource/image/${a.picture}">
+							<img alt="" style="width: 60px;" src="/pic/${a.picture}">
 						</td>
 						<td>${a.user.username}</td>
 						<td>${a.hits}</td>

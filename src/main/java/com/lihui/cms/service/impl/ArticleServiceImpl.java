@@ -17,10 +17,10 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleDao articleDao;
 
 	@Override
-	public PageInfo<Article> getArticleList(String title, Integer status, Integer pageNum, Integer pageSize) {
+	public PageInfo<Article> getArticleList(Article article, Integer pageNum, Integer pageSize) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(pageNum, pageSize);
-		List<Article> list=articleDao.getArticleList(title,status);
+		List<Article> list=articleDao.getArticleList(article);
 		return new PageInfo<Article>(list);
 	}
 
@@ -41,4 +41,6 @@ public class ArticleServiceImpl implements ArticleService {
 		// TODO Auto-generated method stub
 		articleDao.add(article);
 	}
+
+	
 }

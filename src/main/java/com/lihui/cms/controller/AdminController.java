@@ -8,11 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
+import com.lihui.cms.domain.Article;
+import com.lihui.cms.domain.Category;
 import com.lihui.cms.domain.Channel;
+import com.lihui.cms.domain.Slide;
 import com.lihui.cms.domain.User;
+import com.lihui.cms.service.ArticleService;
 import com.lihui.cms.service.ChannelService;
+import com.lihui.cms.service.SlideService;
 import com.lihui.cms.service.UserService;
 
 @Controller
@@ -23,6 +30,10 @@ public class AdminController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ArticleService articleService;
+	@Autowired
+	private SlideService slideService;
 	
 	/**
 	 * 
@@ -55,11 +66,29 @@ public class AdminController {
 	 * @return: Object
 	 */
 	@RequestMapping("/index")
-	public Object index(Model m) {
-		
-		  List<Channel> list=channelService.channelList();
-		  m.addAttribute("channelList", list);
-		 
+	public Object index(Model m,Article article,@RequestParam(defaultValue = "6")Integer pageSize,@RequestParam(defaultValue = "1")Integer pageNum) {
+		//查询所有栏目
+		List<Channel> list=channelService.channelList();
+		m.addAttribute("channelList", list);
+		//判断是否有选择栏目  非空查询栏目下文章   空默认为热门
+		if(article.getChannel_id()!=null) {
+			//获取栏目下的所有分类
+			List<Category> cates=channelService.categoryList(article.getChannel_id().toString());
+			m.addAttribute("cates", cates);
+			//查询文章
+			PageInfo<Article> pageInfo=articleService.getArticleList(article,pageNum,pageSize);
+			m.addAttribute("articles", pageInfo.getList());
+			
+		}else {
+			//查询广告表，制作轮播图
+			List<Slide> slides=slideService.slideList();
+			m.addAttribute("slides", slides);
+			//查询最热文章
+			article.setHot(1);
+			PageInfo<Article> pageInfo=articleService.getArticleList(article, pageNum, pageSize);
+			m.addAttribute("hots", pageInfo.getList());
+		}
+		m.addAttribute("article", article);
 		return "index/index";
 	}
 	/**
