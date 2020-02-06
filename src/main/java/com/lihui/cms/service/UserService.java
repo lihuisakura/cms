@@ -3,6 +3,7 @@ package com.lihui.cms.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.lihui.cms.domain.Settings;
 import com.lihui.cms.domain.User;
 
 public interface UserService {
@@ -11,12 +12,10 @@ public interface UserService {
 
 	int updateLocated(String id, String locted);
 
-	User loginUser(String username,String password);
+	User loginUser(User user);
 
-	Boolean registerUser(String username, String password);
+	Boolean registerUser(User user);
 
-	Boolean loginAdmin(String username, String password);
-
-	Boolean registerAdmin(String username, String password);
+	
 
 }

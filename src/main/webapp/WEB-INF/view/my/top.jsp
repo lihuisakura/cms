@@ -8,7 +8,10 @@
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="user/register">注册</a>
 		</c:if>
 		<c:if test="${user!=null}">
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:1100px;text-align: center;"   href="my">${user.nickname}</a>
+			<a  style="margin-left:1010px;text-decoration: none;"   href="my">
+				<img src="/pic/${user.photo}" style="border-radius:50%" alt="..." width="30px" height="30px">
+			</a> 
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:10px;text-align: center;"   href="my">${user.nickname}</a>
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="user/logout">注销</a>
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="/index">头条首页</a>
 		</c:if>

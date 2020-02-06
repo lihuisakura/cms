@@ -5,7 +5,7 @@
 <ul style="background-color: white;" class="sidebar navbar-nav"></ul>
 <ul  style="text-align:center;list-style-type:none;background-color: white;" class="sidebar navbar-nav" >
 			<li style="display:inline;list-style-type:none;margin-top: 20px;margin-bottom: 10px;" class="nav-item">
-				<a  href="admin">
+				<a  href="my">
 					<img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png"  alt="今日头条" style="width: 108px; height: 27px;">
 				</a>	
 			</li>

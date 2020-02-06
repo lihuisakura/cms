@@ -26,5 +26,11 @@ public class ChannelServiceImpl implements ChannelService {
 		// TODO Auto-generated method stub
 		return channelDao.selectCategory(id);
 	}
+
+	@Override
+	public Channel getChannel(Integer channel_id) {
+		// TODO Auto-generated method stub
+		return channelDao.getChannel(channel_id);
+	}
 	
 }

@@ -101,8 +101,9 @@ function changeStatus(status,obj){
 						<td>${a.status==0?'待审':a.status==1?'审核通过':'审核未通过'}</td>
 						<td><fmt:formatDate value="${a.created}" /></td>
 						<td>
-							<button type="button" class="btn btn-primary" data-toggle="modal"
-								data-target="#exampleModal" onclick="look(${a.id})">详情
+							
+							<button type="button" onclick="look(${a.id})" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
+							 详情
 							</button>
 						</td>
 					</tr>
@@ -116,27 +117,33 @@ function changeStatus(status,obj){
 
 	</div>
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel"></h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">...</div>
-				<div class="modal-footer">
-					<button type="button" name="id" class="btn btn-success"
-						data-dismiss="modal" onclick="changeStatus(1,this)">通过</button>
-					<button type="button" name="id" class="btn btn-primary"
-						data-dismiss="modal" onclick="changeStatus(-1,this)">不通过</button>
-				</div>
-			</div>
+	
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-scrollable" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		       <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        ...
+		      </div>
+		      <div class="modal-footer">
+		       <button type="button" name="id" class="btn btn-success"
+					data-dismiss="modal" onclick="changeStatus(1,this)">通过</button>
+				<button type="button" name="id" class="btn btn-primary"
+					data-dismiss="modal" onclick="changeStatus(-1,this)">不通过</button>
+		      </div>
+		    </div>
+		  </div>
 		</div>
-	</div>
+
+	
+	
 </body>
 </html>

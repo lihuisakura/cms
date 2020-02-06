@@ -20,13 +20,22 @@ function loginUser(){
 		return ;
 	}
 	$.post("loginUser",$("form").serialize(),function(result){
-		
-		if(result){
+		if(result=="true"){
+			
 			$("#alert").hide();
 			location="/index";
 		}else{
 			$("#alert").show();
-			$("#alert").html("用户名或密码错误");
+			if(result=="usernameNo"){
+				$("#alert").html("用户名不存在");
+			}
+			if(result=="passwordNot"){
+				$("#alert").html("密码错误");
+			}
+			if(result=="locked"){
+				$("#alert").html("用户已被禁止登录，请联系管理员");
+			}
+			
 			return ;
 		}
 	});

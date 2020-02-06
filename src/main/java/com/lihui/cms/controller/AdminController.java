@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,12 @@ import com.github.pagehelper.PageInfo;
 import com.lihui.cms.domain.Article;
 import com.lihui.cms.domain.Category;
 import com.lihui.cms.domain.Channel;
+import com.lihui.cms.domain.Settings;
 import com.lihui.cms.domain.Slide;
 import com.lihui.cms.domain.User;
 import com.lihui.cms.service.ArticleService;
 import com.lihui.cms.service.ChannelService;
+import com.lihui.cms.service.SettingsService;
 import com.lihui.cms.service.SlideService;
 import com.lihui.cms.service.UserService;
 
@@ -34,6 +37,8 @@ public class AdminController {
 	private ArticleService articleService;
 	@Autowired
 	private SlideService slideService;
+	@Autowired
+	private SettingsService settingsService;
 	
 	/**
 	 * 
@@ -70,25 +75,33 @@ public class AdminController {
 		//查询所有栏目
 		List<Channel> list=channelService.channelList();
 		m.addAttribute("channelList", list);
+		//最新文章
+		PageInfo<Article> newArticle=articleService.getArticleList(article, pageNum, 3);
+		m.addAttribute("newArticle", newArticle.getList());
 		//判断是否有选择栏目  非空查询栏目下文章   空默认为热门
 		if(article.getChannel_id()!=null) {
 			//获取栏目下的所有分类
 			List<Category> cates=channelService.categoryList(article.getChannel_id().toString());
 			m.addAttribute("cates", cates);
 			//查询文章
-			PageInfo<Article> pageInfo=articleService.getArticleList(article,pageNum,pageSize);
-			m.addAttribute("articles", pageInfo.getList());
-			
+			PageInfo<Article> pageInfo=articleService.getArticleList(article,pageNum,4);
+			m.addAttribute("articles", pageInfo);
+			//查询最热文章
+			article.setHot(1);
+			PageInfo<Article> pageInfo1=articleService.getArticleList(article, 1, 3);
+			m.addAttribute("hots", pageInfo1);
 		}else {
 			//查询广告表，制作轮播图
 			List<Slide> slides=slideService.slideList();
 			m.addAttribute("slides", slides);
 			//查询最热文章
 			article.setHot(1);
-			PageInfo<Article> pageInfo=articleService.getArticleList(article, pageNum, pageSize);
-			m.addAttribute("hots", pageInfo.getList());
+			PageInfo<Article> pageInfo=articleService.getArticleList(article, pageNum, 3);
+			m.addAttribute("hots", pageInfo);
 		}
 		m.addAttribute("article", article);
+		
+		
 		return "index/index";
 	}
 	/**
@@ -125,12 +138,19 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/loginAdmin")
-	public Object loginAdmin(User user,HttpSession session) {
-		Boolean flag=userService.loginAdmin(user.getUsername(),user.getPassword());
-		if(flag) {
-			session.setAttribute("adminUser", user);
+	public Object loginAdmin(Settings settings,HttpSession session) {
+
+		String password=settings.getAdmin_password();
+		settings=settingsService.loginAdmin(settings);
+		//把输入的密码  加密  过后 和数据库中的已有的加密的密码比对
+		String md5Hex = DigestUtils.md5Hex(password);
+		if(settings==null) {
+			return "usernameNo";
+		}else if(!settings.getAdmin_password().equals(md5Hex)) {
+			return "passwordNot";
 		}
-		return flag;
+		session.setAttribute("adminUser", settings);
+		return "true";
 	}
 	
 	/**
@@ -143,9 +163,18 @@ public class AdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/registerAdmin")
-	public Object registerAdmin(User user) {
-		Boolean flag=userService.registerAdmin(user.getUsername(),user.getPassword());
-		return flag;
+	public Object registerAdmin(Settings settings) {
+		Settings Testsettings=new Settings();
+		Testsettings.setAdmin_username(settings.getAdmin_username());
+		Testsettings=settingsService.loginAdmin(Testsettings);
+		if(null!=Testsettings) {
+			return "existUser";
+		}
+		//注册之前对密码进行md5加密  使用apach工具类进行加密
+		String md5Hex = DigestUtils.md5Hex(settings.getAdmin_password());
+		settings.setAdmin_password(md5Hex);
+		settingsService.registerAdmin(settings);
+		return "true";
 	}
 	/**
 	 * 

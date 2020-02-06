@@ -12,9 +12,9 @@
 <script type="text/javascript" src="/resource/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function register(){
-	var username=$("[name=username]").val();
-	var password=$("[name=password]").val();
-	var password2=$("[name=password2]").val();
+	var username=$("[name=admin_username]").val();
+	var password=$("[name=admin_password]").val();
+	var password2=$("[name=admin_password2]").val();
 	if(username==null || username=="" || password=="" || password==null  || password2=="" || password2==null){
 		$("#alert").show();
 		$("#alert").html("管理员账号或密码不能为空");
@@ -26,12 +26,15 @@ function register(){
 		return ;
 	}
 	$.post("/registerAdmin",$("form").serialize(),function(result){
-		if(result){
+		if(result=="true"){
 			$("#alert").hide();
-			location="/user/login";
+			location="/login";
 		}else{
 			$("#alert").show();
-			$("#alert").html("注册失败");
+			if(result="existUser"){
+				$("#alert").html("用户已存在");
+				return ;
+			}
 			return ;
 		}
 	});
@@ -54,16 +57,16 @@ function register(){
 	                    <div class="card-body py-3">
 	                        <div class="form-group">
 	                            <label class="form-control-label">管理员账号</label>
-	                            <input type="text" name="username" class="form-control">
+	                            <input type="text" name="admin_username" class="form-control">
 	                        </div>
 	
 	                        <div class="form-group">
 	                            <label class="form-control-label">管理员密码</label>
-	                            <input type="password" name="password" class="form-control">
+	                            <input type="password" name="admin_password" class="form-control">
 	                        </div>
 	                        <div class="form-group">
 	                            <label class="form-control-label">确认密码</label>
-	                            <input type="password" name="password2" class="form-control">
+	                            <input type="password" name="admin_password2" class="form-control">
 	                        </div>
 	
 	                    </div>

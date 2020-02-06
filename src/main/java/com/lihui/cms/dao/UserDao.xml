@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	
-	<sql id="selects_sql">id,username,nickname,gender,birthday,created,updated,locked</sql>
+	<sql id="selects_sql">id,username,nickname,gender,birthday,created,updated,locked,photo</sql>
 	<select id="getUserList" resultMap="UserList">
 		select <include refid="selects_sql"/> from cms_user
 		<where>
@@ -26,13 +26,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="created" column="created"/>
 		<result property="updated" column="updated"/>
 		<result property="locked" column="locked"/>
+		<result property="photo" column="photo"/>
 	</resultMap>
 
 
 	<select id="loginUser" resultMap="UserList">
-		select * from cms_user where username=#{username} and password=#{password}
+		select * from cms_user 
+		<where>
+			<if test="null!=username and username!=''">and username=#{username}</if>
+		</where>
 	</select>
-	<select id="loginAdmin" resultType="java.lang.Integer">
-		select count(1) from cms_admin where username=#{username} and password=#{password}
-	</select>
+	
+	<insert id="registerUser">
+		insert into cms_user
+		<set>
+			<if test="null!=username and username!=''">
+				username=#{username},
+			</if>
+			<if test="nickname==null and null!=username and username!=''">
+				nickname=#{username},
+			</if>
+			<if test="nickname!=null and nickname!=''">
+				nickname=#{nickname},
+			</if>
+			<if test="null!=password and password!=''">
+			 	password=#{password},
+			</if>
+			<if test="null==locked ">
+			 	locked=0,
+			</if>
+			<if test="null==created">
+			 	created=now(),
+			</if>
+			<if test="null==updated">
+			 	updated=now(),
+			</if>
+			<if test="null==photo">
+			 	photo='6e7a2556-03bf-4633-9ba8-72440eec727e.jpg'
+			</if>
+		</set>
+	</insert>
+	
+	
 </mapper>

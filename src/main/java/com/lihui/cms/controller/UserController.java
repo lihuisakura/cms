@@ -2,14 +2,18 @@ package com.lihui.cms.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpServerErrorException;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -108,20 +112,44 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/loginUser")
 	public Object loginUser(User user,HttpSession session) {
-		user=userService.loginUser(user.getUsername(),user.getPassword());
 		
-		if(user!=null) {
-			session.setAttribute("user", user);
-			return true;
+		String password=user.getPassword();
+		user=userService.loginUser(user);
+		//把输入的密码  加密  过后 和数据库中的已有的加密的密码比对
+		String md5Hex = DigestUtils.md5Hex(password);
+		if(user==null) {
+			return "usernameNo";
+		}else if(user.getLocked()==1) {
+			return "locked";
+		}else if(!user.getPassword().equals(md5Hex)) {
+			return "passwordNot";
 		}
-		return false;
+		session.setAttribute("user", user);
+		return "true";
+		
 	}
 	
-	
+	/**
+	 * 
+	 * @Title: registerUser 
+	 * @Description: 注册用户
+	 * @param user
+	 * @return
+	 * @return: Object
+	 */
 	@ResponseBody
 	@RequestMapping("/registerUser")
 	public Object registerUser(User user) {
-		Boolean flag=userService.registerUser(user.getUsername(),user.getPassword());
-		return flag;
+		User testUser =new User();
+		testUser.setUsername(user.getUsername());
+		testUser=userService.loginUser(testUser);
+		if(null!=testUser) {
+			return "existUser";
+		}
+		//注册之前对密码进行md5加密  使用apach工具类进行加密
+		String md5Hex = DigestUtils.md5Hex(user.getPassword());
+		user.setPassword(md5Hex);
+		userService.registerUser(user);
+		return "true";
 	}
 }

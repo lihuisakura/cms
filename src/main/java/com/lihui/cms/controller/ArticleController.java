@@ -37,7 +37,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: selects 
-	 * @Description: 查询文章列表，实现分页
+	 * @Description: 文章管理，查询文章列表，实现分页
 	 * @param m
 	 * @param article
 	 * @param pageNum
@@ -49,7 +49,7 @@ public class ArticleController {
 	public Object selects(Model m, Article article, @RequestParam(defaultValue = "1") Integer pageNum,
 			@RequestParam(defaultValue = "3") Integer pageSize) {
 
-		PageInfo<Article> page = articleService.getArticleList(article, pageNum,
+		PageInfo<Article> page = articleService.getstatusList(article, pageNum,
 				pageSize);
 
 		m.addAttribute("page", page);
@@ -94,7 +94,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: selectArticleList 
-	 * @Description: TODO
+	 * @Description: 个人中心的查看文章
 	 * @param m
 	 * @param article
 	 * @param pageNum
@@ -104,9 +104,12 @@ public class ArticleController {
 	 */
 	@RequestMapping("selectArticleList")
 	public Object selectArticleList(Model m, Article article, @RequestParam(defaultValue = "1") Integer pageNum,
-			@RequestParam(defaultValue = "3") Integer pageSize) {
-
-		PageInfo<Article> page = articleService.getArticleList(article, pageNum,
+			@RequestParam(defaultValue = "3") Integer pageSize,HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if(user!=null) {
+			article.setUser_id(user.getId());
+		}
+		PageInfo<Article> page = articleService.getstatusList(article, pageNum,
 				pageSize);
 
 		m.addAttribute("page", page);
@@ -119,7 +122,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: toAdd 
-	 * @Description: TODO
+	 * @Description: 去发布文章页面
 	 * @return
 	 * @return: Object
 	 */
@@ -130,7 +133,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: channelList 
-	 * @Description: 栏目列表
+	 * @Description: 查询栏目列表
 	 * @return
 	 * @return: Object
 	 */
@@ -143,7 +146,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: categoryList 
-	 * @Description: 分类列表
+	 * @Description: 查询分类列表
 	 * @param id
 	 * @return
 	 * @return: Object
@@ -157,7 +160,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: add 
-	 * @Description: 文章发布
+	 * @Description: 个人中心文章发布
 	 * @param article
 	 * @param file
 	 * @param session

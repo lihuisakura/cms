@@ -26,12 +26,15 @@ function register(){
 		return ;
 	}
 	$.post("registerUser",$("form").serialize(),function(result){
-		if(result){
+		if(result=="true"){
 			$("#alert").hide();
 			location="/user/login";
 		}else{
 			$("#alert").show();
-			$("#alert").html("注册失败");
+			if(result="existUser"){
+				$("#alert").html("用户已存在");
+				return ;
+			}
 			return ;
 		}
 	});

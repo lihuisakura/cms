@@ -30,5 +30,28 @@
 		<property name="providerClass"
 			value="org.hibernate.validator.HibernateValidator"></property>
 	</bean>
-
+	
+	<!-- 自定义拦截器 -->
+    <!-- 自定义拦截器 -->
+    <mvc:interceptors>
+    	<mvc:interceptor>
+    		<!-- 拦截的请求地址 -->
+    		<mvc:mapping path="/my"/>
+    		<mvc:mapping path="/my/**"/>
+    		<!-- 设置放行地址 -->
+    		
+    		<!-- 自定义的拦截器的类 -->
+    		<bean class="com.lihui.cms.interceptor.MyInterceptor"></bean>
+    	</mvc:interceptor>
+    	<mvc:interceptor>
+    		<!-- 拦截的请求地址 -->
+    		<mvc:mapping path="/admin"/>
+    		<mvc:mapping path="/article/selects"/>
+    		<mvc:mapping path="/user/selects"/>
+    		<!-- 设置放行地址 -->
+    		
+    		<!-- 自定义的拦截器的类 -->
+    		<bean class="com.lihui.cms.interceptor.AdminInterceptor"></bean>
+    	</mvc:interceptor>
+    </mvc:interceptors> 
 </beans>

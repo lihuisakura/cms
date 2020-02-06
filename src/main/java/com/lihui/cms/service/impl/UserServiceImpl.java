@@ -31,26 +31,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User loginUser(String username,String password) {
+	public User loginUser(User user) {
 		// TODO Auto-generated method stub
-		return userDao.loginUser(username,password);
+		return userDao.loginUser(user);
 	}
 
 	@Override
-	public Boolean registerUser(String username, String password) {
+	public Boolean registerUser(User user) {
 		// TODO Auto-generated method stub
-		return userDao.registerUser(username,password)>0;
+		return userDao.registerUser(user)>0;
 	}
 
-	@Override
-	public Boolean loginAdmin(String username, String password) {
-		// TODO Auto-generated method stub
-		return userDao.loginAdmin(username,password)>0;
-	}
-
-	@Override
-	public Boolean registerAdmin(String username, String password) {
-		// TODO Auto-generated method stub
-		return userDao.registerAdmin(username,password)>0;
-	}
+	
 }

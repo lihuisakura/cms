@@ -28,6 +28,14 @@ public class User implements Serializable{
 	private Date created;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updated;
+	private String photo;
+	
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -91,7 +99,7 @@ public class User implements Serializable{
 		super();
 	}
 	public User(Integer id, String username, String password, String nickname, Date birthday, Gender gender,
-			Integer locked, Date created, Date updated) {
+			Integer locked, Date created, Date updated,String photo) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -102,13 +110,15 @@ public class User implements Serializable{
 		this.locked = locked;
 		this.created = created;
 		this.updated = updated;
+		this.photo=photo;
 	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", nickname=" + nickname
 				+ ", birthday=" + birthday + ", gender=" + gender + ", locked=" + locked + ", created=" + created
-				+ ", updated=" + updated + "]";
+				+ ", updated=" + updated + ", photo=" + photo + "]";
 	}
+	
 	
 	
 	

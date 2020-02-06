@@ -7,6 +7,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="channelList" resultMap="channelMap">
 		select * from cms_channel 
 	</select>
+	<select id="getChannel" resultMap="channelMap">
+		select * from cms_channel 
+		where id=#{id}
+	</select>
 
 	<resultMap type="Channel" id="channelMap">
 		<id property="id" column="id"/>

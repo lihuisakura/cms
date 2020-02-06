@@ -23,6 +23,13 @@ public class ArticleServiceImpl implements ArticleService {
 		List<Article> list=articleDao.getArticleList(article);
 		return new PageInfo<Article>(list);
 	}
+	@Override
+	public PageInfo<Article> getstatusList(Article article, Integer pageNum, Integer pageSize) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(pageNum, pageSize);
+		List<Article> list=articleDao.getstatusList(article);
+		return new PageInfo<Article>(list);
+	}
 
 	@Override
 	public Article selectArticle(String id) {
@@ -40,6 +47,19 @@ public class ArticleServiceImpl implements ArticleService {
 	public void add(Article article) {
 		// TODO Auto-generated method stub
 		articleDao.add(article);
+	}
+	/**
+	 * 增加点击量
+	 */
+	@Override
+	public void addHits(String id) {
+		 Article article = articleDao.selectArticle(id);
+		//点击量过20为热门
+		if(article.getHits()==19) {
+			articleDao.updateHot(id);
+		}
+		article.setHits(article.getHits()+1);
+		articleDao.updateHit(article);
 	}
 
 	

@@ -34,7 +34,23 @@
 }
 </style>
 <script type="text/javascript">
-
+$(function(){
+	var id="${article.id}";
+	$("#commentList").load("/comment/commentList?id="+id);
+})
+function comment(){
+	
+	var formData=$("#form01").serialize();
+	$.post("/comment/addComment",formData,function(result){
+		var id="${article.id}";
+		$("#commentList").load("/comment/commentList?id="+id);
+	});
+	
+}
+function goPage(page){
+	var id="${article.id}";
+	$("#commentList").load("/comment/commentList?id="+id+"&pageNum="+page);
+}
 </script>
 </head>
 <body id="page-top">
@@ -43,13 +59,16 @@
 	<!-- 今日头条系统顶部 -->
 	<nav  style="background-color: black;height:34px;">
 		<c:if test="${user==null}">
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 1100px;background-color: red;width:50px;text-align: center;"   href="user/login">登录</a>
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="user/register">注册</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 1100px;background-color: red;width:50px;text-align: center;"   href="/user/login">登录</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="/user/register">注册</a>
 		</c:if>
 		<c:if test="${user!=null}">
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:1100px;text-align: center;"   href="my">${user.nickname}</a>
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="user/logout">注销</a>
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="my">个人中心</a>
+			<a  style="margin-left:1010px;text-decoration: none;"   href="my">
+				<img src="/pic/${user.photo}" style="border-radius:50%" alt="..." width="30px" height="30px">
+			</a> 
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:10px;text-align: center;"   href="my">${user.nickname}</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="/user/logout">注销</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="/my">个人中心</a>
 		</c:if>
 		
 		<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="javascript:void(0)">侵权投诉</a>
@@ -58,9 +77,9 @@
 	
 	<nav style="height:40px;margin-top: 10px">
 		<img src="//s3.pstatp.com/toutiao/static/img/logo.271e845.png"  alt="今日头条" style="width: 108px; height: 27px;margin-left: 180px;margin-right: 30px">
-	    	<button type="button" class="btn" style="margin-right: 20px" onclick="location='/index'">首页</button>
-			<!-- <button type="button" class="btn btn-secondary">Middle</button>
-			<button type="button" class="btn btn-secondary">Right</button> -->
+	    	<button type="button" class="btn"  onclick="location='/index'">首页</button>--
+	    	<button type="button" class="btn"  onclick="location='/index?channel_id=${articleChannel.id}'">${articleChannel.name}</button>--
+	    	<button class="btn" style="pointer-events: none;color:#8F8F8F" >正文</button>
 	    <hr>
 	</nav>
 		
@@ -68,7 +87,7 @@
 	
 	<!-- 中间显示内容 -->
 	<div id="wrapper" style="margin-top: 20px">
-		<!-- 今日头条系统左部菜单 -->
+		<!-- 中间左侧边框 --> 
 		<ul style="background-color: white;width:130px !important" class="sidebar navbar-nav"></ul>
 		<ul  style="text-align:center;list-style-type:none;background-color: white;" class="sidebar navbar-nav" >
 			<li style="margin-top: 3px">
@@ -76,19 +95,61 @@
 			</li>
 		</ul>
 		
+		
 		<!-- 中间内容显示区域 -->
 		<div id="content-wrapper" style="width:800px !important">
 			<div style="padding: 0px 20px">
-				<h1>${article.title }</h1>
+				<h1 style="font-weight: bold;">${article.title }</h1>
 				<h6 style="padding: 15px 0px;">${article.user.username }
 				<span style="margin-right: 15px"></span>
 				<fmt:formatDate value="${article.created }" pattern="yyyy-MM-dd HH-mm-ss"/>
 				</h6>
 				<span>${article.content }</span>
+				<hr style="background-color:#F0F0F0;height:2px;border:none;">
+				<c:if test="${user!=null}">
+					<form id="form01">
+						<div class="form-group">
+							<input type="hidden" name="user_id" value="${user.id}">
+							<input type="hidden" name="article_id" value="${article.id }">
+							<label for="Textarea1">评论</label>
+							<textarea class="form-control" name="content" id="Textarea1" placeholder="写下您的评论..." rows="2"></textarea>
+							<button type="button" onclick="comment()" class="btn btn-dark mb-2" style="margin-left: 560px">评论</button>
+						</div>
+					</form>
+				</c:if>
+				<c:if test="${user==null}">
+					<a href="/user/login"  class="btn btn-link my-3">请登录后再评论</a>
+				</c:if>
+				<hr style="background-color:#F0F0F0;height:2px;border:none;">
+				<ul id="commentList" class="list-unstyled">
+					<!-- 此处为评论区 -->
+				</ul>
 			</div>
 		</div>
+		
+		
+		<!-- 中间右侧边框 -->
 		<div style="background-color: #F4F4F4;width:350px !important" class="sidebar navbar-nav">
-			<h5>相关文章</h5>
+			
+			<div style="padding: 10px 20px">
+				<h5 style="margin-top: 10px">相关文章</h5>
+				<ul class="list-unstyled">
+						<c:forEach items="${relevantArticle}" var="relevant">
+							<li class="media">
+								<a href="/index/select?id=${relevant.id }" >
+									<img src="/pic/${relevant.picture }" class="mt-1" alt="..." width="50px" height="50px">
+								</a>
+								<div class="media-body " style="margin-left: 5px;">
+									<a href="/index/select?id=${relevant.id }" 
+									style="font-size: 10px;height:10px;color: black;overflow: hidden;white-space: nowrap;text-overflow:ellipsis ;">${relevant.title }</a>
+									<p style="font-size: 10px;padding-top: 10px">${relevant.user.username }&nbsp;&nbsp;
+								<fmt:formatDate value="${relevant.created }" pattern="yyyy-MM-dd HH-mm-ss" /></p> 
+								</div>
+							</li>
+							<hr>
+						</c:forEach>
+				</ul>
+			</div>
 		</div>
 		<div style="background-color: white;" class="sidebar navbar-nav"></div>
 		

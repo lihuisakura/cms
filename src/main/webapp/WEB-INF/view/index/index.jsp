@@ -14,12 +14,8 @@
 <script type="text/javascript" src="/resource/js/jquery-3.2.1.js"></script>
 <script type="text/javascript" src="/resource/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-//给左侧(left.jsp)中的所有的连接绑定点击事件
 $(function(){
 
-	
-	
-	
 })
 </script>
 <style type="text/css">
@@ -55,7 +51,10 @@ $(function(){
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="user/register">注册</a>
 		</c:if>
 		<c:if test="${user!=null}">
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:1100px;text-align: center;"   href="my">${user.nickname}</a>
+			<a  style="margin-left:1010px;text-decoration: none;"   href="my">
+				<img src="/pic/${user.photo}" style="border-radius:50%" alt="..." width="30px" height="30px">
+			</a> 
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:10px;text-align: center;"   href="my">${user.nickname}</a>
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="user/logout">注销</a>
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="my">个人中心</a>
 		</c:if>
@@ -124,9 +123,11 @@ $(function(){
 				<div id="hotArticle" >
 				<hr>
 						<ul class="list-unstyled">
-							<c:forEach items="${hots}" var="h">
+							<c:forEach items="${hots.list}" var="h">
 								<li class="media">
-									<img src="/pic/${h.picture }" class="mt-1" alt="..." width="150px" height="100px">
+									<a href="/index/select?id=${h.id }" >
+										<img src="/pic/${h.picture }" class="mt-1" alt="..." width="150px" height="100px">
+									</a>
 									<div class="media-body " style="margin-left: 50px;padding-top: 10px">
 										<h5 class="mt-0 mb-1 ">
 											<a href="/index/select?id=${h.id }" 
@@ -138,9 +139,29 @@ $(function(){
 								<hr>
 							</c:forEach>
 						</ul>
+						<!-- 分页 -->
+					  <ul class="pagination">
+					    <li class="page-item">
+					      <a class="page-link" href="/index?pageNum=${page==0?'1':hots.prePage}" aria-label="Previous">
+					        <span aria-hidden="true">&laquo;</span>
+					      </a>
+					    </li>
+					     <c:forEach items="${hots.navigatepageNums}" var="page">
+					    	 <li class="page-item"><a class="page-link" href="/index?pageNum=${page}">${page}</a></li>
+					    </c:forEach> 
+					   
+					    
+					    <li class="page-item">
+					      <a class="page-link" href="/index?pageNum=${page==0?hots.pages:hots.nextPage}" aria-label="Next">
+					        <span aria-hidden="true">&raquo;</span>
+					      </a>
+					    </li>
+					  </ul>
+						
 				</div>
 				
 			</c:if>
+			<!-- 栏目下的文章 -->
 			<c:if test="${article.channel_id!=null}">
 				<div >
 				  <button type="button" class="btn" style="margin-right: 10px;font-weight: bolder;${article.category_id==null?'color:red':''}" onclick="location='/index?channel_id=${article.channel_id}'">全部</button>
@@ -151,33 +172,97 @@ $(function(){
 				</div>
 				<div>
 					<ul class="list-unstyled">
-						<c:forEach items="${articles}" var="a">
+						<c:forEach items="${articles.list}" var="a">
 							<li class="media">
-								<img src="/pic/${a.picture }" class="mt-1" alt="..." width="150px" height="100px">
+								<a href="/index/select?id=${a.id }" >
+									<img src="/pic/${a.picture }" class="mt-1" alt="..." width="150px" height="100px">
+								</a>
 								<div class="media-body " style="margin-left: 50px;padding-top: 10px">
 									<h5 class="mt-0 mb-1 ">
 										<a href="/index/select?id=${a.id }" 
 										style="font-size: 25px;color: black;font-weight: bold;">${a.title }</a> 
 									</h5>
 									<br> ${a.user.username }&nbsp;&nbsp;&nbsp;
-									<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd" />
+									<fmt:formatDate value="${a.created }" pattern="yyyy-MM-dd HH-mm-ss" />
 								</div>
 							</li>
 							<hr>
 						</c:forEach>
 					</ul>
+					<!-- 分页 -->
+					  <ul class="pagination">
+					    <li class="page-item">
+					      <a class="page-link" href="/index?pageNum=${page==0?'1':hots.prePage}&channel_id=${article.channel_id}&category_id=${article.category_id}" aria-label="Previous">
+					        <span aria-hidden="true">&laquo;</span>
+					      </a>
+					    </li>
+					     <c:forEach items="${articles.navigatepageNums}" var="page">
+					    	 <li class="page-item"><a class="page-link" href="/index?pageNum=${page}&channel_id=${article.channel_id}&category_id=${article.category_id}">${page}</a></li>
+					    </c:forEach> 
+					   
+					    
+					    <li class="page-item">
+					      <a class="page-link" href="/index?pageNum=${page==0?hots.pages:hots.nextPage}&channel_id=${article.channel_id}&category_id=${article.category_id}" aria-label="Next">
+					        <span aria-hidden="true">&raquo;</span>
+					      </a>
+					    </li>
+					  </ul>
 				</div>
 			</c:if>	
 			
 
 		</div>
 		<div style="background-color: white;" class="sidebar navbar-nav">
-				<div style="padding: 10px">
+				<div style="padding: 10px 20px">
 					<h5 style="margin-top: 10px">最新文章</h5>
+					<ul class="list-unstyled">
+							<c:forEach items="${newArticle}" var="n">
+								<li class="media">
+									<a href="/index/select?id=${n.id }" >
+										<img src="/pic/${n.picture }" class="mt-1" alt="..." width="50px" height="50px">
+									</a>
+									<div class="media-body " style="margin-left: 5px;">
+										<a href="/index/select?id=${n.id }" 
+										style="font-size: 10px;height:10px;color: black;overflow: hidden;white-space: nowrap;text-overflow:ellipsis ;">${n.title }</a>
+										<p style="font-size: 10px;padding-top: 10px">${n.user.username }&nbsp;&nbsp;
+									<fmt:formatDate value="${n.created }" pattern="yyyy-MM-dd HH-mm-ss" /></p> 
+									</div>
+								</li>
+								<hr>
+							</c:forEach>
+					</ul>
+				</div>
+				<div style="padding: 10px 20px">
+					<h5 style="margin-top: 10px">最热文章</h5>
+					<ul class="list-unstyled">
+							<c:forEach items="${hots.list}" var="h">
+								<li class="media">
+									<a href="/index/select?id=${h.id }" >
+										<img src="/pic/${h.picture }" class="mt-1" alt="..." width="50px" height="50px">
+									</a>
+									<div class="media-body " style="margin-left: 5px;">
+										<a href="/index/select?id=${h.id }" 
+										style="font-size: 10px;height:10px;color: black;overflow: hidden;white-space: nowrap;text-overflow:ellipsis ;">${h.title }</a>
+										<p style="font-size: 10px;padding-top: 10px">${h.user.username }&nbsp;&nbsp;
+									<fmt:formatDate value="${h.created }" pattern="yyyy-MM-dd HH-mm-ss" /></p> 
+									</div>
+								</li>
+								<hr>
+							</c:forEach>
+					</ul>
 				</div>
 		</div>
 		<div style="background-color: white;" class="sidebar navbar-nav"></div>
 	</div>
+	
+	<footer class="container my-auto" style="height: 100px;background-color: #e9ecef;position: static;">
+		<div class="copyright text-center my-auto" style="padding-top: 10px">
+			<span>光辉制作© Your Website 2020</span>
+		</div>
+		<div class="copyright text-center my-auto" style="padding-top: 10px">
+			<span>光辉制作© Your Website 2020</span>
+		</div>
+	</footer>
 	
 </body>
 </html>

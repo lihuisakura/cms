@@ -12,8 +12,8 @@
 <script type="text/javascript" src="/resource/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function loginUser(){
-	var username=$("[name=username]").val();
-	var password=$("[name=password]").val();
+	var username=$("[name=admin_username]").val();
+	var password=$("[name=admin_password]").val();
 	if(username==null || username=="" || password=="" || password==null){
 		$("#alert").show();
 		$("#alert").html("管理员账号或密码不能为空");
@@ -21,12 +21,18 @@ function loginUser(){
 	}
 	$.post("/loginAdmin",$("form").serialize(),function(result){
 		
-		if(result){
+		if(result=="true"){
 			$("#alert").hide();
 			location="/admin";
 		}else{
 			$("#alert").show();
-			$("#alert").html("管理员账号或密码错误");
+			if(result=="usernameNo"){
+				$("#alert").html("管理员账号不存在");
+			}
+			if(result=="passwordNot"){
+				$("#alert").html("密码错误");
+			}
+			
 			return ;
 		}
 	});
@@ -51,12 +57,12 @@ function loginUser(){
 	                    <div class="card-body py-3">
 	                        <div class="form-group">
 	                            <label class="form-control-label">管理员账号</label>
-	                            <input type="text" name="username" class="form-control">
+	                            <input type="text" name="admin_username" class="form-control">
 	                        </div>
 	
 	                        <div class="form-group">
 	                            <label class="form-control-label">管理员密码</label>
-	                            <input type="password" name="password" class="form-control">
+	                            <input type="password" name="admin_password" class="form-control">
 	                        </div>
 	
 	                        <!-- <div class="custom-control custom-checkbox mt-4">

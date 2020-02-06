@@ -24,7 +24,7 @@
 			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;" href="javascript:void(0)" data="待开发">
 					<i class="fas fa-fw fa-table"></i> <span>系统设置</span>
 			</a></li>
-			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;" href="javascript:void(0)" data="links/selects">
+			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;" href="javascript:void(0)" data="link/selects">
 					<i class="fas fa-fw fa-table"></i> <span>友情链接</span>
 			</a></li>
 </ul>

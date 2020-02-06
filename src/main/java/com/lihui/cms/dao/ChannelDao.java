@@ -13,4 +13,6 @@ public interface ChannelDao {
 
 	List<Category> selectCategory(@Param("id")String id);
 
+	Channel getChannel(Integer channel_id);
+
 }

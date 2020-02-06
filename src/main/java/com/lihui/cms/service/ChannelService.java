@@ -11,6 +11,8 @@ public interface ChannelService {
 
 	List<Category> categoryList(String id);
 
+	Channel getChannel(Integer channel_id);
+
 	
 
 }

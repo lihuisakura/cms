@@ -5,18 +5,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.lihui.cms.dao.ArticleDao">
 
 	
-	
+	<select id="getstatusList" resultMap="ArticleList">
+		select * from cms_article
+		<where>
+			<if test="null!=user_id and user_id!=''">and user_id =${user_id}</if>
+			<if test="null!=title and title!=''">and title like concat('%${title}%')</if>
+			<if test="null!=status and status!=' '">and status =#{status}</if>
+		</where>
+		ORDER BY created desc
+	</select>
 	
 
 	<select id="getArticleList" resultMap="ArticleList">
 		select * from cms_article
 		<where>
+			<if test="null!=user_id and user_id!=''">and user_id =${user_id}</if>
 			<if test="null!=title and title!=''">and title like concat('%${title}%')</if>
-			<if test="null!=status and status!=' '">and status =${status}</if>
+			<if test="true">and status =1</if> 
+			<!-- <if test="null!=status and status!=' '">and status =#{status}</if> -->
 			<if test="channel_id!=null and channel_id!=0">and channel_id=#{channel_id}</if>
 			<if test="category_id!=null and category_id!=0">and category_id=#{category_id}</if>
-			<if test="null!=hot and hot!=''">and hot =${hot}</if>
+			<if test="null!=hot and hot!=0">and hot=1</if>
+			
 		</where>
+		ORDER BY created desc
 	</select>
 	<resultMap type="Article" id="ArticleList">
 		<id property="id" column="id"/>
