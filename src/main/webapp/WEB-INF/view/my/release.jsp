@@ -87,7 +87,7 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 				success:function(msg){
 					if(msg){
 						alert("发布完成");
-						$("#center").load("article/selectArticle");
+						$("#content-wrapper").load("/article/toAdd");
 					}else{
 						alert("发布失败");
 					}

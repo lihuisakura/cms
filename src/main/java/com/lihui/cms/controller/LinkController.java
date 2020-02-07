@@ -18,7 +18,17 @@ public class LinkController {
 	
 	@Autowired
 	private LinkService linkService;
-	
+	/**
+	 * 
+	 * @Title: selects 
+	 * @Description: 查询友情链接列表，返回友情链接界面
+	 * @param m
+	 * @param link
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 * @return: Object
+	 */
 	@RequestMapping("selects")
 	public Object selects(Model m,Link link,@RequestParam(defaultValue = "1")Integer pageNum,@RequestParam(defaultValue = "3")Integer pageSize) {
 		
@@ -28,22 +38,58 @@ public class LinkController {
 		m.addAttribute("page", page);
 		return "admin/link";
 	}
-	@ResponseBody
+	/**
+	 * 
+	 * @Title: selectLinkID 
+	 * @Description: 按id查询友情链接，返回友情链接修改界面
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
 	@RequestMapping("selectLinkID")
-	public Object selectLinkID(String id) {
+	public Object selectLinkID(Model m,String id) {
 		Link link=linkService.selectLinkID(id);
-		return link;
+		m.addAttribute("link", link);
+		return "admin/updateLink";
 	}
+	/**
+	 * 
+	 * @Title: update 
+	 * @Description: 友情链接修改
+	 * @param link
+	 * @return
+	 * @return: Object
+	 */
 	@ResponseBody
 	@RequestMapping("update")
 	public Object update(Link link) {
-		if(link.getText()==null || link.getText()=="") {
-			return false;
-		}
-		if(link.getUrl()==null || link.getUrl()=="") {
-			return false;
-		}
 		boolean flag=linkService.update(link);
+		return flag;
+	}
+	/**
+	 * 
+	 * @Title: toAdd 
+	 * @Description: 跳转界面至添加友情链接界面
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("toAdd")
+	public Object toAdd() {
+		
+		return "admin/addLink";
+	}
+	/**
+	 * 
+	 * @Title: add 
+	 * @Description: 友情链接新增
+	 * @param link
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("add")
+	public Object add(Link link) {
+		boolean flag=linkService.add(link);
 		return flag;
 	}
 }

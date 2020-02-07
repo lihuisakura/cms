@@ -11,4 +11,6 @@ public interface LinkService {
 
 	boolean update(Link link);
 
+	boolean add(Link link);
+
 }

@@ -48,6 +48,9 @@
     		<mvc:mapping path="/admin"/>
     		<mvc:mapping path="/article/selects"/>
     		<mvc:mapping path="/user/selects"/>
+    		<mvc:mapping path="/link/selects"/>
+    		<mvc:mapping path="/link/selectLinkID"/>
+    		<mvc:mapping path="/link/toAdd"/>
     		<!-- 设置放行地址 -->
     		
     		<!-- 自定义的拦截器的类 -->

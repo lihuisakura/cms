@@ -15,4 +15,6 @@ public interface LinkDao {
 	
 	int update(Link link);
 
+	int add(Link link);
+
 }

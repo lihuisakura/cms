@@ -22,47 +22,18 @@ function goPage(pageNum){
 }
 //修改
 function update(id){
-	//根据id查看链接 
-	$.post(
-		"/link/selectLinkID",
-		{id:id},
-		function(result){
-			//把值给谁?
-					
-			$("#updID").val(result.id);
-			$("#updText").val(result.text);
-			$("#updUrl").val(result.url);
-			
-		}
-	); 
+	$("#content-wrapper").load("/link/selectLinkID?id="+id);
+	
 }
-function toUpdate(){
-	var updateLink=$("#updateLink").serialize();
-	$.post(
-			"/link/update",
-			updateLink,
-			function(result){
-				if(result){
-					alert("修改成功");
-					
-					$("#content-wrapper").load("link/selects");
-					
-				}else{
-					alert("修改失败");
-				}
-			}
-	);
-}
+
 //新增
 function add(){
-	
+	$("#content-wrapper").load("/link/toAdd");
 }
 </script>
 </head>
 <body>
 	<div style="padding: 0 10px 0 10px">
-
-
 		<div>
 			<form id="f1">
 				链接名称: <input type="text" name="text" value="${text}" /> 
@@ -101,34 +72,7 @@ function add(){
 		<jsp:include page="/WEB-INF/view/public/page.jsp"></jsp:include>
 
 	</div>
-<!-- Modal -->
-		 <form id="updateLink" method="post">
-		<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-scrollable" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		       <h5 class="modal-title" id="exampleModalLabel">链接修改</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		       		<div id="alert" class="alert alert-danger my-2" style="display: none;margin-left: 20px;width: 404px" role="alert">
-						  
-					</div>
-					<input type="hidden" id="updID" name="id" /> 
-					链接名称: <input type="text" id="updText" name="text" /><br> 
-					链接地址: <input type="text" id="updUrl" name="url"  /> 
-			
-		      </div>
-		      <div class="modal-footer">
-		       <button type="button"  class="btn btn-success" id="toUpdateLink"
-					data-dismiss="modal" onclick="toUpdate()">确定修改</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		</form>
+
 		
 </body>
 </html>

@@ -8,7 +8,7 @@
 		</c:if>
 		<c:if test="${adminUser!=null}">
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:1050px;text-align: center;"   href="my">${adminUser.admin_username}</a>
-			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="user/logout">注销</a>
+			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;background-color: red;width:50px;text-align: center;"   href="/logout">注销</a>
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="/index">头条首页</a>
 		</c:if>
 		

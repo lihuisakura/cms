@@ -35,4 +35,10 @@ public class LinkServiceImpl implements LinkService {
 		// TODO Auto-generated method stub
 		return linkDao.update(link)>0;
 	}
+
+	@Override
+	public boolean add(Link link) {
+		// TODO Auto-generated method stub
+		return linkDao.add(link)>0;
+	}
 }

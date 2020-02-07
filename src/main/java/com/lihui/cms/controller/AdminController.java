@@ -16,11 +16,13 @@ import com.github.pagehelper.PageInfo;
 import com.lihui.cms.domain.Article;
 import com.lihui.cms.domain.Category;
 import com.lihui.cms.domain.Channel;
+import com.lihui.cms.domain.Link;
 import com.lihui.cms.domain.Settings;
 import com.lihui.cms.domain.Slide;
 import com.lihui.cms.domain.User;
 import com.lihui.cms.service.ArticleService;
 import com.lihui.cms.service.ChannelService;
+import com.lihui.cms.service.LinkService;
 import com.lihui.cms.service.SettingsService;
 import com.lihui.cms.service.SlideService;
 import com.lihui.cms.service.UserService;
@@ -39,6 +41,8 @@ public class AdminController {
 	private SlideService slideService;
 	@Autowired
 	private SettingsService settingsService;
+	@Autowired
+	private LinkService linkService;
 	
 	/**
 	 * 
@@ -101,7 +105,10 @@ public class AdminController {
 		}
 		m.addAttribute("article", article);
 		
-		
+		//查询友情链接,显示最新的10条链接
+		Link link=new Link();
+		PageInfo<Link> links=linkService.selects(link, 1, 10);
+		m.addAttribute("links", links);
 		return "index/index";
 	}
 	/**

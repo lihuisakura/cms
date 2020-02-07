@@ -63,7 +63,7 @@ $(function(){
 		<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="javascript:void(0)">头条产品</a>
 	</nav>
 	
-	<div id="wrapper">
+	<div  id="wrapper">
 		<!-- 今日头条系统左部菜单 -->
 		<ul style="background-color: white;width:173px !important" class="sidebar navbar-nav"></ul>
 		<ul  style="text-align:center;list-style-type:none;background-color: white; " class="sidebar navbar-nav" >
@@ -255,9 +255,12 @@ $(function(){
 		<div style="background-color: white;" class="sidebar navbar-nav"></div>
 	</div>
 	
-	<footer class="container my-auto" style="height: 100px;background-color: #e9ecef;position: static;">
-		<div class="copyright text-center my-auto" style="padding-top: 10px">
-			<span>光辉制作© Your Website 2020</span>
+	<footer  style="height: 100px;background-color: #e9ecef;position: static;">
+		<div class="copyright text-center my-auto" style="padding-top: 20px">
+			友情链接：
+			<c:forEach items="${links.list}" var="link">
+				<a style="text-decoration: none;color: black;padding: 0px 5px;" href="${link.url}">${link.text}</a>
+			</c:forEach>
 		</div>
 		<div class="copyright text-center my-auto" style="padding-top: 10px">
 			<span>光辉制作© Your Website 2020</span>
