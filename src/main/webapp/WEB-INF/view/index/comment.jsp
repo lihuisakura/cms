@@ -5,7 +5,7 @@
 
 <c:forEach  items="${comments.list}" var="comment">
 	<li class="media">
-		<a  style="text-decoration: none;"   href="#">
+		<a  style="text-decoration: none;"   href="javascript:void(0)">
 			<img src="/pic/${comment.user.photo}" style="border-radius:50%" alt="..." width="50px" height="50px">
 		</a> 
 		<div  style="margin-left: 10px;">

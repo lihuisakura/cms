@@ -1,9 +1,11 @@
 package com.lihui.cms.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -73,7 +76,8 @@ public class UserController {
 	 * @return: Object
 	 */
 	@RequestMapping("/login")
-	public Object login() {
+	public Object login(Model m,String id) {
+		m.addAttribute("id", id);
 		return "public/login";
 	}
 	/**
@@ -151,5 +155,49 @@ public class UserController {
 		user.setPassword(md5Hex);
 		userService.registerUser(user);
 		return "true";
+	}
+	/**
+	 * 
+	 * @Title: homePage 
+	 * @Description: 跳转至个人主页，可以进行修改资料
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("homePage")
+	public Object homePage() {
+		return "/public/homePage";
+	}
+	
+	@ResponseBody
+	@RequestMapping("updateUser")
+	public Object updateUser(HttpSession session,User user,@RequestParam(required=false)MultipartFile myFile) {
+		
+		
+		if(null!=myFile && !myFile.equals("")) {
+			//获得文件名
+			String fileName = myFile.getOriginalFilename();
+				//获得文件后缀名
+				String endName = fileName.substring(fileName.lastIndexOf("."));
+				//随机生成新的文件名
+				String newName = UUID.randomUUID().toString();
+				//上传到图片库
+				String path="e:/pic/";
+				File file=new File(path+newName+endName);
+				try {
+					myFile.transferTo(file);
+				} catch (IllegalStateException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				user.setPhoto(newName+endName);
+			
+			
+		}
+		Boolean flag=userService.updateUser(user);
+		if(flag) {
+			User user2 = userService.loginUser(user);
+			session.setAttribute("user", user2);
+		}
+		return flag;
 	}
 }

@@ -12,6 +12,7 @@
 <script type="text/javascript" src="/resource/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function loginUser(){
+	var id="${id}";
 	var username=$("[name=username]").val();
 	var password=$("[name=password]").val();
 	if(username==null || username=="" || password=="" || password==null){
@@ -21,8 +22,11 @@ function loginUser(){
 	}
 	$.post("loginUser",$("form").serialize(),function(result){
 		if(result=="true"){
-			
 			$("#alert").hide();
+			if(id!=""){
+				location="/index/select?id="+id;
+				return;
+			}
 			location="/index";
 		}else{
 			$("#alert").show();

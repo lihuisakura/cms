@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from cms_user 
 		<where>
 			<if test="null!=username and username!=''">and username=#{username}</if>
+			<if test="null!=id and id!=''">and id=#{id}</if>
 		</where>
 	</select>
 	
@@ -67,5 +68,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 	</insert>
 	
+	<update id="updateUser">
+		update cms_user
+		<set>
+			<if test="nickname!=null and  nickname!=''">
+				nickname=#{nickname},
+			</if>
+			<if test="birthday!=null ">
+				birthday=#{birthday},
+			</if>
+			<if test="null==updated">
+			 	updated=now(),
+			</if>
+			<if test="null!=photo and photo!=''">
+			 	photo=#{photo},
+			</if>
+			<if test="true">
+			 	gender=#{gender.ordinal}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
 	
 </mapper>

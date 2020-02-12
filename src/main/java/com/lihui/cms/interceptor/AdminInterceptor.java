@@ -12,12 +12,14 @@ import com.lihui.cms.domain.User;
 
 public class AdminInterceptor implements HandlerInterceptor{
 
+	private static long preCurrentTimeMillis;
 	//拦截目标之前执行
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
 		Settings user = (Settings) session.getAttribute("adminUser");
+		preCurrentTimeMillis= System.currentTimeMillis();
 		if(user!=null) {
 			return true;
 		}else {
@@ -38,7 +40,9 @@ public class AdminInterceptor implements HandlerInterceptor{
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+		long currentTimeMillis = System.currentTimeMillis();
+		long time=currentTimeMillis-preCurrentTimeMillis;
+		System.out.println("管理员登录需要时间："+time+"毫秒");
 	}
 
 }

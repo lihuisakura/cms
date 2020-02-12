@@ -16,6 +16,8 @@ public interface UserService {
 
 	Boolean registerUser(User user);
 
+	Boolean updateUser(User user);
+
 	
 
 }

@@ -118,7 +118,7 @@ function goPage(page){
 					</form>
 				</c:if>
 				<c:if test="${user==null}">
-					<a href="/user/login"  class="btn btn-link my-3">请登录后再评论</a>
+					<a href="/user/login?id=${article.id }"  class="btn btn-link my-3">请登录后再评论</a>
 				</c:if>
 				<hr style="background-color:#F0F0F0;height:2px;border:none;">
 				<ul id="commentList" class="list-unstyled">
