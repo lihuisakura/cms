@@ -18,6 +18,9 @@
 			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;"  href="javascript:void(0)" data="article/toAdd">
 					 <span>发布文章</span>
 			</a></li>
+			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;"  href="javascript:void(0)" data="user/findFavorite?user_id=${user.id}">
+					 <span>我的收藏夹</span>
+			</a></li>
 			<li style="margin-top: 3px"><a class="my-btn btn-outline-danger" style="text-decoration:none;" href="javascript:void(0)" data="待开发">
 					 <span>资源管理</span>
 			</a></li>

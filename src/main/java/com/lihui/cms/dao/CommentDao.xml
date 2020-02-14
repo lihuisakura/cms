@@ -59,4 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select id,username,nickname,birthday,created,updated,locked,photo from cms_user where id=#{user_id}
 	</select>
 	
+	
+	<select id="findCommentNum" resultType="java.lang.Integer">
+		select count(1) from cms_comment where article_id=#{id}
+	</select>
 </mapper>

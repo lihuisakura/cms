@@ -227,6 +227,11 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>com.lihui</groupId>
+			<artifactId>lihui_utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 

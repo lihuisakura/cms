@@ -90,10 +90,6 @@ public class AdminController {
 			//查询文章
 			PageInfo<Article> pageInfo=articleService.getArticleList(article,pageNum,4);
 			m.addAttribute("articles", pageInfo);
-			//查询最热文章
-			article.setHot(1);
-			PageInfo<Article> pageInfo1=articleService.getArticleList(article, 1, 3);
-			m.addAttribute("hots", pageInfo1);
 		}else {
 			//查询广告表，制作轮播图
 			List<Slide> slides=slideService.slideList();
@@ -103,6 +99,11 @@ public class AdminController {
 			PageInfo<Article> pageInfo=articleService.getArticleList(article, pageNum, 3);
 			m.addAttribute("hots", pageInfo);
 		}
+		//查询热门推荐
+		article.setHot(1);
+		PageInfo<Article> pageInfo1=articleService.getArticleList(article, 1, 3);
+		m.addAttribute("hotsTen", pageInfo1);
+		//
 		m.addAttribute("article", article);
 		
 		//查询友情链接,显示最新的10条链接

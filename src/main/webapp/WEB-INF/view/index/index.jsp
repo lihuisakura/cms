@@ -233,9 +233,9 @@ $(function(){
 					</ul>
 				</div>
 				<div style="padding: 10px 20px">
-					<h5 style="margin-top: 10px">最热文章</h5>
+					<h5 style="margin-top: 10px">热门推荐</h5>
 					<ul class="list-unstyled">
-							<c:forEach items="${hots.list}" var="h">
+							<c:forEach items="${hotsTen.list}" var="h">
 								<li class="media">
 									<a href="/index/select?id=${h.id }" >
 										<img src="/pic/${h.picture }" class="mt-1" alt="..." width="50px" height="50px">

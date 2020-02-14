@@ -57,5 +57,21 @@ public class CommentController {
 		m.addAttribute("comments", page);
 		return "/index/comment";
 	}
+	/**
+	 * 
+	 * @Title: findCommentNum 
+	 * @Description: 文章评论个数
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("findCommentNum")
+	public Object findCommentNum(String id) {
+		int num=commentService.findCommentNum(id);
+		return num;
+	}
+	
+	
 	
 }

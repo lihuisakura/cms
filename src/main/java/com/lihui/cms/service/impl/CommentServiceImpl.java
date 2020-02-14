@@ -29,4 +29,10 @@ public class CommentServiceImpl implements CommentService {
 		// TODO Auto-generated method stub
 		commentDao.addComment(comment);
 	}
+
+	@Override
+	public int findCommentNum(String id) {
+		// TODO Auto-generated method stub
+		return commentDao.findCommentNum(id);
+	}
 }

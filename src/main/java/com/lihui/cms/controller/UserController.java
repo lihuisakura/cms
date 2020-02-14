@@ -20,9 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lihui.cms.domain.Favorite;
 import com.lihui.cms.domain.User;
+import com.lihui.cms.service.FavoriteService;
 import com.lihui.cms.service.UserService;
 import com.lihui.cms.util.PageUtil;
+import com.lihui.utils.StringUtil;
 
 @RequestMapping("user")
 @Controller
@@ -30,6 +33,8 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private FavoriteService favoriteService;
 
 	/**
 	 * 
@@ -167,7 +172,16 @@ public class UserController {
 	public Object homePage() {
 		return "/public/homePage";
 	}
-	
+	/**
+	 * 
+	 * @Title: updateUser 
+	 * @Description: 修改用户资料
+	 * @param session
+	 * @param user
+	 * @param myFile
+	 * @return
+	 * @return: Object
+	 */
 	@ResponseBody
 	@RequestMapping("updateUser")
 	public Object updateUser(HttpSession session,User user,@RequestParam(required=false)MultipartFile myFile) {
@@ -199,5 +213,64 @@ public class UserController {
 			session.setAttribute("user", user2);
 		}
 		return flag;
+	}
+	
+	/**
+	 * 
+	 * @Title: findFavorite 
+	 * @Description: 进入我的收藏夹，查询收藏夹列表
+	 * @param m
+	 * @param user_id
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("findFavorite")
+	public Object findFavorite(Model m,String user_id,@RequestParam(defaultValue = "1")Integer pageNum,@RequestParam(defaultValue = "3")Integer pageSize) {
+		Favorite favorite=new Favorite();
+		favorite.setUser_id(Integer.parseInt(user_id));
+		PageInfo<Favorite> page=favoriteService.findFavorite(favorite,pageNum,pageSize);
+		m.addAttribute("page", page);
+		return "/my/favorite";
+	}
+	/**
+	 * 
+	 * @Title: deleteFavorite 
+	 * @Description: 删除收藏夹
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("deleteFavorite")
+	public Object deleteFavorite(String id) {
+		boolean flag=favoriteService.deleteFavorite(id);
+		return flag;
+	}
+	/**
+	 * 
+	 * @Title: addFavorite 
+	 * @Description: 添加收藏夹
+	 * @param favorite
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("addFavorite")
+	public Object addFavorite(Favorite favorite) {
+		favoriteService.add(favorite);
+		return true;
+	}
+	/**
+	 * 
+	 * @Title: toAddFavorite 
+	 * @Description: 前往添加收藏夹界面
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("toAddFavorite")
+	public Object toAddFavorite() {
+		return "/my/addFavorite";
 	}
 }

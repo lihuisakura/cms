@@ -36,20 +36,49 @@
 <script type="text/javascript">
 $(function(){
 	var id="${article.id}";
+	$.post("/comment/findCommentNum",{id:id},function(num){
+		$("#commentNum").html(num);
+	});
 	$("#commentList").load("/comment/commentList?id="+id);
 })
 function comment(){
-	
 	var formData=$("#form01").serialize();
 	$.post("/comment/addComment",formData,function(result){
+		$("#Textarea1").val("");
 		var id="${article.id}";
 		$("#commentList").load("/comment/commentList?id="+id);
 	});
-	
+	var id="${article.id}";
+	$.post("/comment/findCommentNum",{id:id},function(num){
+		$("#commentNum").html(num);
+	});
 }
 function goPage(page){
 	var id="${article.id}";
 	$("#commentList").load("/comment/commentList?id="+id+"&pageNum="+page);
+}
+function addFavorite(){
+	var user_id="${user.id}";
+	var id="${article.id }";
+	if(null==user_id || user_id==""){
+		alert("请登录后收藏");
+		location="/user/login?id="+id;
+		return ;
+	}
+	var text="${article.title}";
+	var url= window.location.href; 
+	$.post(
+			"/user/addFavorite",
+			{text:text,url:url,user_id:user_id},
+			function(result){
+				if(result==true){
+					alert("收藏成功");
+				}else if(result=="NoUrl"){
+					alert("收藏夹地址格式不正确");
+					return;
+				}
+			}
+	);
 }
 </script>
 </head>
@@ -63,7 +92,7 @@ function goPage(page){
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left: 20px;text-align: center;"   href="/user/register">注册</a>
 		</c:if>
 		<c:if test="${user!=null}">
-			<a  style="margin-left:1010px;text-decoration: none;"   href="my">
+			<a  style="margin-left:1010px;text-decoration: none;"   href="/user/homePage">
 				<img src="/pic/${user.photo}" style="border-radius:50%" alt="..." width="30px" height="30px">
 			</a> 
 			<a class="navbar-brand mr-1" style="color: white;font-size: 1rem;margin-left:10px;text-align: center;"   href="my">${user.nickname}</a>
@@ -91,8 +120,48 @@ function goPage(page){
 		<ul style="background-color: white;width:130px !important" class="sidebar navbar-nav"></ul>
 		<ul  style="text-align:center;list-style-type:none;background-color: white;" class="sidebar navbar-nav" >
 			<li style="margin-top: 3px">
-				
+				<!-- <button type="button" class="btn btn-primary" onclick="addFavorite()">收藏</button> -->
+				<div class="media" style="align-items: center;padding-top: 20px">
+				  	<img src="/pic/7cda1e6db1f84fd00d40d67cfdeb6ebe.jpg" title="评论数量" class="mr-3" style="width: 45px;height: 45px;border-radius:20%;margin-left:70px" alt="评论数">
+				    <h5 id="commentNum" style="color: #FF6347"></h5>
+				</div>
+				<hr style="margin-left:70px">
 			</li>
+			<li style="margin-top: 3px">
+				<div class="media" style="align-items: center;">
+				  <a href="javascript:void(0)" onclick="addFavorite()" >
+				  	<img src="/pic/5aa193ce89129448b920d6c81237a588.jpg" class="mr-3 repost-img" style="width: 35px;height: 35px;margin-left:74px" >
+				  </a>
+				  <a href="javascript:void(0)" onclick="addFavorite()"  style="text-decoration: none;color: black">
+				  	<h6>收藏</h6>
+				  </a>
+				</div>
+			</li>
+			<li style="margin-top: 3px">
+				<div class="media" style="align-items: center;margin-top: 10px">
+				  <img src="//s3.pstatp.com/toutiao/static/img/repost.021bf16.png" class="mr-3 repost-img" style="width: 35px;height: 35px;margin-left:74px" >
+				  <h6>转发</h6>
+				</div>
+			</li>
+			<li style="margin-top: 3px">
+				<div class="media" style="align-items: center;margin-top: 10px">
+				  <img src="/pic/4f5640643c3e593870a864b2a2c7377a.jpg" class="mr-3 repost-img" style="width: 35px;height: 35px;margin-left:74px" >
+				  <h6>微信</h6>
+				</div>
+			</li>
+			<li style="margin-top: 3px">
+				<div class="media" style="align-items: center;margin-top: 10px">
+				  <img src="/pic/8dbf641c5a6e0f2d5c41139b585241ed.jpg" class="mr-3 repost-img" style="width: 35px;height: 35px;margin-left:74px" >
+				  <h6>QQ</h6>
+				</div>
+			</li>
+			<li style="margin-top: 3px">
+				<div class="media" style="align-items: center;margin-top: 10px">
+				  <img src="/pic/a85435274cc0a5ef7fbb01b2615a6a12.jpg" class="mr-3 repost-img" style="width: 35px;height: 35px;margin-left:74px" >
+				  <h6>微博</h6>
+				</div>
+			</li>
+			
 		</ul>
 		
 		
@@ -104,6 +173,7 @@ function goPage(page){
 				<span style="margin-right: 15px"></span>
 				<fmt:formatDate value="${article.created }" pattern="yyyy-MM-dd HH-mm-ss"/>
 				</h6>
+				
 				<span>${article.content }</span>
 				<hr style="background-color:#F0F0F0;height:2px;border:none;">
 				<c:if test="${user!=null}">

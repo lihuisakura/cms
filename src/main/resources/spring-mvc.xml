@@ -38,6 +38,10 @@
     		<!-- 拦截的请求地址 -->
     		<mvc:mapping path="/my"/>
     		<mvc:mapping path="/my/**"/>
+    		<mvc:mapping path="/public/homePage"/>
+    		<mvc:mapping path="/article/selectArticleList"/>
+    		<mvc:mapping path="/article/toAdd"/>
+    		<mvc:mapping path="/user/findFavorite"/>
     		<!-- 设置放行地址 -->
     		
     		<!-- 自定义的拦截器的类 -->
