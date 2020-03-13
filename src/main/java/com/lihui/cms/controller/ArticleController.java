@@ -2,6 +2,7 @@ package com.lihui.cms.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +19,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lihui.cms.dao.ArticleRepository;
 import com.lihui.cms.domain.Article;
 import com.lihui.cms.domain.Category;
 import com.lihui.cms.domain.Channel;
+import com.lihui.cms.domain.Content;
 import com.lihui.cms.domain.User;
+import com.lihui.cms.domain.enums.ContentType;
 import com.lihui.cms.service.ArticleService;
 import com.lihui.cms.service.ChannelService;
+import com.lihui.cms.util.HLUtils;
 
 
 @Controller
@@ -33,6 +42,12 @@ public class ArticleController {
 	private ArticleService articleService;
 	@Autowired
 	private ChannelService channelService;
+	@Autowired
+	private ArticleRepository articleRepository;
+	@Autowired
+	private ElasticsearchTemplate elasticsearchTemplate;
+	@Autowired
+	private KafkaTemplate<String, String> kafka;
 
 	/**
 	 * 
@@ -72,13 +87,22 @@ public class ArticleController {
 	@ResponseBody
 	public Object selectArticle(String id) {
 		Article article = articleService.selectArticle(id);
+		if(article.getContent_type()==ContentType.IMAGE) {
+			String content = article.getContent();
+			List<Content> contentList = JSON.parseArray(content, Content.class);
+			StringBuffer sb=new StringBuffer();
+			for (Content content2 : contentList) {
+				sb.append("<img src='/pic/"+content2.getPictrue()+"' class='d-block w-100' alt='...'><br>"+content2.getMessage()+"<br>");
+			}
+			article.setContent(sb.toString());
+		}
 		return article;
 	}
 
 	/**
 	 * 
 	 * @Title: updateStatus 
-	 * @Description: 修改文章状态
+	 * @Description: 修改文章状态,审核文章（同时发送消息至kafka，更新es数据）
 	 * @param status
 	 * @param id
 	 * @return
@@ -88,6 +112,7 @@ public class ArticleController {
 	@ResponseBody
 	public Object updateStatus(String status, String id) {
 		int i = articleService.updateStatus(status, id);
+		kafka.send("article", "audit="+id);
 		return i >= 1 ? true : false;
 	}
 
@@ -192,6 +217,7 @@ public class ArticleController {
 				article.setPicture(fileName);
 				
 			}
+			article.setContent_type(ContentType.HTML);
 			articleService.add(article);
 			return true;
 		} catch (IllegalStateException | IOException e) {
@@ -200,5 +226,92 @@ public class ArticleController {
 		}
 		return false;
 	}
+	/**
+	 * 
+	 * @Title: toAddImage 
+	 * @Description: 前往发布图片界面
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("toAddImage")
+	public Object toAddImage() {
+		return "my/addImage";
+	}
+	/**
+	 * 
+	 * @Title: addImage 
+	 * @Description: 新增图片
+	 * @param article
+	 * @param files
+	 * @return
+	 * @return: Object
+	 */
+	@ResponseBody
+	@RequestMapping("addImage")
+	public Object addImage(Article article,@RequestParam("file")MultipartFile file,MultipartFile[] myFiles,String[] myMessages) {
+		try {
+			if(file.getSize()>0) {
+				String path="e:/pic/";
+				String originalFilename = file.getOriginalFilename();
+				String endName = originalFilename.substring(originalFilename.lastIndexOf("."));
+				String newName = UUID.randomUUID().toString()+endName;
+				File files = new File(path+newName);
+				file.transferTo(files);
+				article.setPicture(newName);
+			}
+			List<Content> list=new ArrayList<Content>();
+			int i=0;
+			for (MultipartFile myFile : myFiles) {
+				if(myFile.getSize()>0) {
+					//上传文件名
+					String originalFilename = myFile.getOriginalFilename();
+					//图片存放位置
+					String path="e:/pic/";
+					//上传文件的随机名
+					String startName = UUID.randomUUID().toString();
+					//获取上传文件后缀
+					String endName = originalFilename.substring(originalFilename.lastIndexOf("."));
+					//创建上传文件
+					File fileOne=new File(path+startName+endName);
+					//在指定位置创建文件
+					myFile.transferTo(fileOne);
+					Content content=new Content(startName+endName, myMessages[i]);
+					list.add(content);
+				}
+				i++;
+			}
+			article.setContent(JSON.toJSONString(list));
+			article.setContent_type(ContentType.IMAGE);
+			articleService.add(article);
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 
+	/**
+	 * 
+	 * @Title: search 
+	 * @Description: 用elasticsearch完成搜素
+	 * @param m
+	 * @param key
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 * @return: Object
+	 */
+	@RequestMapping("search")
+	public Object search(Model m,String key,@RequestParam(defaultValue = "1")Integer pageNum,@RequestParam(defaultValue = "5")Integer pageSize) {
+		
+		List<Article> articleSearch = articleRepository.findByTitle(key);
+		
+		PageInfo<Article> info=(PageInfo<Article>) HLUtils.findByHighLight(elasticsearchTemplate, Article.class, pageNum, pageSize, new String[]{"title"}, "id", key);
+		m.addAttribute("key", key);
+		m.addAttribute("articleSearch", info);
+		return "index/index";
+	}
+	
+	
 }

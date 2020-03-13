@@ -259,6 +259,9 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("addFavorite")
 	public Object addFavorite(Favorite favorite) {
+		if(favoriteService.findOneFavorite(favorite.getUrl(),favorite.getUser_id())) {
+			return "haveFavorite";
+		}
 		favoriteService.add(favorite);
 		return true;
 	}

@@ -3,8 +3,14 @@ package com.lihui.cms.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.lihui.cms.domain.enums.ContentType;
+@Document(indexName = "cms_article",type = "article")
 public class Article implements Serializable{
 
 	
@@ -15,8 +21,11 @@ public class Article implements Serializable{
 	 * @Description: TODO
 	 */
 	private static final long serialVersionUID = 1L;
+	@Id
 	private Integer id;
+	@Field(index = true,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_max_word",type =FieldType.text )
 	private String title;
+	@Field(index = true,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_max_word",type =FieldType.text )
 	private String content;
 	private String picture;
 	private Integer channel_id;
@@ -31,7 +40,18 @@ public class Article implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updated;
 	private User user;
+	private ContentType content_type;
 	
+	
+	public ContentType getContent_type() {
+		return content_type;
+	}
+	public void setContent_type(ContentType content_type) {
+		this.content_type = content_type;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
 	public User getUser() {
 		return user;
 	}
@@ -120,9 +140,10 @@ public class Article implements Serializable{
 		this.updated = updated;
 	}
 	
+	
 	public Article(Integer id, String title, String content, String picture, Integer channel_id, Integer category_id,
 			Integer user_id, Integer hits, Integer hot, Integer status, Integer deleted, Date created, Date updated,
-			User user) {
+			User user, ContentType content_type) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -138,6 +159,7 @@ public class Article implements Serializable{
 		this.created = created;
 		this.updated = updated;
 		this.user = user;
+		this.content_type = content_type;
 	}
 	public Article() {
 		super();
@@ -147,7 +169,7 @@ public class Article implements Serializable{
 		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
 				+ ", channel_id=" + channel_id + ", category_id=" + category_id + ", user_id=" + user_id + ", hits="
 				+ hits + ", hot=" + hot + ", status=" + status + ", deleted=" + deleted + ", created=" + created
-				+ ", updated=" + updated + ", user=" + user + "]";
+				+ ", updated=" + updated + ", user=" + user + ", content_type=" + content_type + "]";
 	}
 	
 	

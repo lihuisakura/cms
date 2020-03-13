@@ -34,5 +34,11 @@ public class FavoriteServiceImpl implements FavoriteService {
 		// TODO Auto-generated method stub
 		favoriteDao.add(favorite);
 	}
+
+	@Override
+	public boolean findOneFavorite(String url,Integer user_id) {
+		// TODO Auto-generated method stub
+		return favoriteDao.findOneFavorite(url,user_id)>0;
+	}
 	
 }

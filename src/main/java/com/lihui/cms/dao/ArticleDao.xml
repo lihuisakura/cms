@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="channel_id!=null and channel_id!=0">and channel_id=#{channel_id}</if>
 			<if test="category_id!=null and category_id!=0">and category_id=#{category_id}</if>
 			<if test="null!=hot and hot!=0">and hot=1</if>
-			
+			<if test="true">and content_type=#{content_type.ordinal}</if>
 		</where>
 		ORDER BY created desc
 	</select>
@@ -44,6 +44,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="deleted" column="deleted"/>
 		<result property="created" column="created"/>
 		<result property="updated" column="updated"/>
+		<!-- org.apache.ibatis.type.EnumTypeHandler org.apache.ibatis.type.EnumOrdinalTypeHandler -->
+		<result property="content_type" column="content_type"
+		javaType="com.lihui.cms.domain.enums.ContentType"
+		typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/> 
 		<collection property="user" ofType="User" select="selectUser" column="user_id">
 			<id property="id" column="id"/>
 			<result property="username" column="username"/>
@@ -103,6 +107,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	</if>
 	 	<if test="created==null">
 	 		created=now(),
+	 	</if>
+	 	<if test="true">
+	 		content_type=#{content_type.ordinal},
 	 	</if>
 	 	<if test="updated==null">
 	 		updated=now()

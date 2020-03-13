@@ -40,9 +40,10 @@ function add(){
 				<div style="margin-left: 100px">
 					<h5 class="mt-0 mb-1 "><a  href="javascript:void(0)" onclick="location='${f.url}'" style="font-size: 25px;color: black;font-weight: bold;" >${f.text }</a></h5><br>
 					时间&nbsp;&nbsp;：&nbsp;&nbsp;
-					<fmt:formatDate value="${f.created }" pattern="yyyy-MM-dd"/>
+					<fmt:formatDate value="${f.created }" pattern="yyyy-MM-dd HH-mm-ss"/>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a  href="javascript:void(0)" onclick="deleteFavorite(${f.id})"  >删除</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<a  href="javascript:void(0)" onclick="deleteFavorite(${f.id})"  >移出收藏夹</a>
 				</div>
 			</li>
 			<hr>

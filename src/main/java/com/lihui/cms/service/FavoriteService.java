@@ -11,4 +11,6 @@ public interface FavoriteService {
 
 	void add(Favorite favorite);
 
+	boolean findOneFavorite(String url, Integer user_id);
+
 }

@@ -30,6 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 		ORDER BY created DESC
 	</select>
+	<select id="findOneFavorite" resultType="java.lang.Integer">
+		select count(1) from cms_favorite 
+		<where>
+			<if test="null!=user_id and user_id!=''">and user_id =#{user_id}</if>
+			<if test="null!=url and url!=''">and url = #{url}</if>
+		</where>
+	</select>
 	
 	
 </mapper>
