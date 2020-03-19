@@ -91,6 +91,7 @@ public class AdminController {
 	@RequestMapping("/index")
 	public Object index(Model m, Article article, @RequestParam(defaultValue = "6") Integer pageSize,
 			@RequestParam(defaultValue = "1") Integer pageNum) {
+		long startTime = System.currentTimeMillis();
 		// 运用redis查询所有栏目
 		List<Channel> list = channelService.channelList();
 		m.addAttribute("channelList", list);
@@ -218,6 +219,9 @@ public class AdminController {
 		 * pageSize, articleService, m); ExecutorService newImagePool =
 		 * Executors.newCachedThreadPool(); newImagePool.execute(newImageThread);
 		 */
+		long endTime = System.currentTimeMillis();
+		long time=endTime-startTime;
+		System.err.println("首页访问需要："+time+"毫秒");
 		return "index/index";
 	}
 

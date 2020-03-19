@@ -294,7 +294,7 @@ public class ArticleController {
 	/**
 	 * 
 	 * @Title: search 
-	 * @Description: 用elasticsearch完成搜素
+	 * @Description: es搜索，高亮显示
 	 * @param m
 	 * @param key
 	 * @param pageNum
@@ -304,12 +304,13 @@ public class ArticleController {
 	 */
 	@RequestMapping("search")
 	public Object search(Model m,String key,@RequestParam(defaultValue = "1")Integer pageNum,@RequestParam(defaultValue = "5")Integer pageSize) {
-		
-		List<Article> articleSearch = articleRepository.findByTitle(key);
-		
-		PageInfo<Article> info=(PageInfo<Article>) HLUtils.findByHighLight(elasticsearchTemplate, Article.class, pageNum, pageSize, new String[]{"title"}, "id", key);
+		long start = System.currentTimeMillis();
+		PageInfo<Article> findByHighLight = (PageInfo<Article>) HLUtils.findByHighLight(elasticsearchTemplate, Article.class, pageNum, pageSize, new String[] {"title"}, "id", key);
+		long end = System.currentTimeMillis();
+		System.err.println("本次搜索所耗时间："+(end-start));
+		m.addAttribute("articleSearch", findByHighLight);
 		m.addAttribute("key", key);
-		m.addAttribute("articleSearch", info);
+		
 		return "index/index";
 	}
 	

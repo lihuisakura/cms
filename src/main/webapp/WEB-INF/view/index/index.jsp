@@ -223,6 +223,7 @@ $(function(){
 					  </ul>
 				</div>
 			</c:if>	
+			<!-- 高亮显示搜索文章 -->
 			<c:if test="${articleSearch!=null}">
 				<div>
 					<ul class="list-unstyled">

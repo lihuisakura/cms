@@ -23,9 +23,9 @@ public class Article implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	private Integer id;
-	@Field(index = true,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_max_word",type =FieldType.text )
+	@Field(index = true,store = true,analyzer = "ik_max_word",searchAnalyzer = "ik_max_word",type = FieldType.text)
 	private String title;
-	@Field(index = true,store = true,searchAnalyzer = "ik_max_word",analyzer = "ik_max_word",type =FieldType.text )
+	@Field(index = true,store = true,analyzer = "ik_max_word",searchAnalyzer = "ik_max_word",type = FieldType.text)
 	private String content;
 	private String picture;
 	private Integer channel_id;
