@@ -363,20 +363,22 @@
 
 
 			<!-- Tomcat插件：非官方插件，第三方插件，用于启动Web服务。运行命令：tomcat7:run -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<!-- 项目端口号 -->
-					<port>8090</port>
-					<!-- 项目的访问路径 -->
-					<path>/</path>
-					<!-- get请求中文乱码 -->
-					<uriEncoding>utf-8</uriEncoding>
-
-				</configuration>
-			</plugin>
+			 <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <path>/</path>
+                    <port>8080</port>
+                    <!-- 自动部署开始 -->
+					    <url>http://192.168.153.128:8080/manager/text</url>
+        				<username>boss</username>
+				        <password>123456</password>
+				        <update>true</update>
+				        <path>/lihui_cms</path>
+				       <!-- 自动部署结束 --> 
+				       
+            	</configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
